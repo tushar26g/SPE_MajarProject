@@ -11,8 +11,8 @@ services:
       - MYSQL_HOST=172.16.139.213
       - MYSQL_PORT=3308
     depends_on:
-        - mydb
-#        condition: service_healthy
+        mydb:
+          condition: service_healthy
 
   mydb:
     image: mysql:latest
