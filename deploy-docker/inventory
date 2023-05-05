@@ -1,2 +1,2 @@
 [tushar]
-client1 ansible_host=172.16.139.213 ansible_connection=ssh ansible_user=user1
+client1 ansible_host=172.16.139.213 ansible_connection=ssh ansible_user=user1 ansible_sudo_pass='1champ@T'

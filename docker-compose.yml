@@ -18,8 +18,8 @@ services:
     image: mysql:latest
     ports:
       - "3308:3306"
-#    healthcheck:
-#      test: ["CMD","ls"]
+    healthcheck:
+      test: ["CMD","ls"]
     container_name: database-container
     #    networks:
     #      fintrack:
