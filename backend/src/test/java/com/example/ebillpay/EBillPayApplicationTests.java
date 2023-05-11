@@ -5,9 +5,12 @@ import com.example.ebillpay.dto.LoginDTO;
 import com.example.ebillpay.entity.Customer;
 import com.example.ebillpay.repository.CustomerRepository;
 import com.example.ebillpay.repository.LoginRepository;
+import com.example.ebillpay.service.CustomerService;
 import com.example.ebillpay.service.CustomerServiceImpl;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,357 +32,43 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class EBillPayApplicationTests {
-    @Test
-    public void testValidLogin() {
-        // arrange
-        Customer expectedCustomer = new Customer("John", "Doe", "johndoe@gmail.com", "1234567890", "123 Main St");
-        LoginRepository loginRepo = new LoginRepository() {
-            @Override
-            public Customer findOneByUserNameAndPassword(String userName, String password) {
-                return null;
-            }
 
-            @Override
-            public Customer findByCustomerId(Integer customerId) {
-                return null;
-            }
+    @Mock
+    private LoginRepository loginRepo;
 
-            @Override
-            public void flush() {
+    @InjectMocks
+    private CustomerService customerService;
 
-            }
-
-            @Override
-            public <S extends Customer> S saveAndFlush(S entity) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> List<S> saveAllAndFlush(Iterable<S> entities) {
-                return null;
-            }
-
-            @Override
-            public void deleteAllInBatch(Iterable<Customer> entities) {
-
-            }
-
-            @Override
-            public void deleteAllByIdInBatch(Iterable<Integer> integers) {
-
-            }
-
-            @Override
-            public void deleteAllInBatch() {
-
-            }
-
-            @Override
-            public Customer getOne(Integer integer) {
-                return null;
-            }
-
-            @Override
-            public Customer getById(Integer integer) {
-                return null;
-            }
-
-            @Override
-            public Customer getReferenceById(Integer integer) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> List<S> findAll(Example<S> example) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> List<S> findAll(Example<S> example, Sort sort) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> List<S> saveAll(Iterable<S> entities) {
-                return null;
-            }
-
-            @Override
-            public List<Customer> findAll() {
-                return null;
-            }
-
-            @Override
-            public List<Customer> findAllById(Iterable<Integer> integers) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> S save(S entity) {
-                return null;
-            }
-
-            @Override
-            public Optional<Customer> findById(Integer integer) {
-                return Optional.empty();
-            }
-
-            @Override
-            public boolean existsById(Integer integer) {
-                return false;
-            }
-
-            @Override
-            public long count() {
-                return 0;
-            }
-
-            @Override
-            public void deleteById(Integer integer) {
-
-            }
-
-            @Override
-            public void delete(Customer entity) {
-
-            }
-
-            @Override
-            public void deleteAllById(Iterable<? extends Integer> integers) {
-
-            }
-
-            @Override
-            public void deleteAll(Iterable<? extends Customer> entities) {
-
-            }
-
-            @Override
-            public void deleteAll() {
-
-            }
-
-            @Override
-            public List<Customer> findAll(Sort sort) {
-                return null;
-            }
-
-            @Override
-            public Page<Customer> findAll(Pageable pageable) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> Optional<S> findOne(Example<S> example) {
-                return Optional.empty();
-            }
-
-            @Override
-            public <S extends Customer> Page<S> findAll(Example<S> example, Pageable pageable) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> long count(Example<S> example) {
-                return 0;
-            }
-
-            @Override
-            public <S extends Customer> boolean exists(Example<S> example) {
-                return false;
-            }
-
-            @Override
-            public <S extends Customer, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
-                return null;
-            }
-        };
-        loginRepo.addCustomer(expectedCustomer);
-
-        // act
-        CustomerDTO actualCustomerDTO = loginCustomer("johndoe", "password");
-
-        // assert
-        assertNotNull(actualCustomerDTO);
-        assertEquals(expectedCustomer.getCustomerId(), actualCustomerDTO.getCustomerId());
-        assertEquals(expectedCustomer.getFirstName(), actualCustomerDTO.getFirstName());
-        assertEquals(expectedCustomer.getLastName(), actualCustomerDTO.getLastName());
-        assertEquals(expectedCustomer.getEmail(), actualCustomerDTO.getEmail());
-        assertEquals(expectedCustomer.getMobileNumber(), actualCustomerDTO.getMobileNumber());
-        assertEquals(expectedCustomer.getAddress(), actualCustomerDTO.getAddress());
+    @Before("")
+    public void setup() {
+        // Setup any mock data or behavior here
     }
 
     @Test
-    public void testInvalidLogin() {
-        // arrange
-        LoginRepository loginRepo = new LoginRepository() {
-            @Override
-            public Customer findOneByUserNameAndPassword(String userName, String password) {
-                return null;
-            }
+    public void testLoginCustomer() {
+        String userName = "testuser";
+        String password = "testpass";
+        Customer mockCustomer = new Customer();
+        mockCustomer.setCustomerId(1);
+        mockCustomer.setAddress("123 Main St");
+        mockCustomer.setEmail("testuser@example.com");
+        mockCustomer.setFirstName("John");
+        mockCustomer.setLastName("Doe");
+        mockCustomer.setMobileNumber("555-1234");
 
-            @Override
-            public Customer findByCustomerId(Integer customerId) {
-                return null;
-            }
+        when(loginRepo.findOneByUserNameAndPassword(userName, password)).thenReturn(mockCustomer);
 
-            @Override
-            public void flush() {
+        CustomerDTO expected = new CustomerDTO();
+        expected.setCustomerId(1);
+        expected.setAddress("123 Main St");
+        expected.setEmail("testuser@example.com");
+        expected.setFirstName("John");
+        expected.setLastName("Doe");
+        expected.setMobileNumber("555-1234");
 
-            }
+        CustomerDTO actual = customerService.loginCustomer(userName, password);
 
-            @Override
-            public <S extends Customer> S saveAndFlush(S entity) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> List<S> saveAllAndFlush(Iterable<S> entities) {
-                return null;
-            }
-
-            @Override
-            public void deleteAllInBatch(Iterable<Customer> entities) {
-
-            }
-
-            @Override
-            public void deleteAllByIdInBatch(Iterable<Integer> integers) {
-
-            }
-
-            @Override
-            public void deleteAllInBatch() {
-
-            }
-
-            @Override
-            public Customer getOne(Integer integer) {
-                return null;
-            }
-
-            @Override
-            public Customer getById(Integer integer) {
-                return null;
-            }
-
-            @Override
-            public Customer getReferenceById(Integer integer) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> List<S> findAll(Example<S> example) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> List<S> findAll(Example<S> example, Sort sort) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> List<S> saveAll(Iterable<S> entities) {
-                return null;
-            }
-
-            @Override
-            public List<Customer> findAll() {
-                return null;
-            }
-
-            @Override
-            public List<Customer> findAllById(Iterable<Integer> integers) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> S save(S entity) {
-                return null;
-            }
-
-            @Override
-            public Optional<Customer> findById(Integer integer) {
-                return Optional.empty();
-            }
-
-            @Override
-            public boolean existsById(Integer integer) {
-                return false;
-            }
-
-            @Override
-            public long count() {
-                return 0;
-            }
-
-            @Override
-            public void deleteById(Integer integer) {
-
-            }
-
-            @Override
-            public void delete(Customer entity) {
-
-            }
-
-            @Override
-            public void deleteAllById(Iterable<? extends Integer> integers) {
-
-            }
-
-            @Override
-            public void deleteAll(Iterable<? extends Customer> entities) {
-
-            }
-
-            @Override
-            public void deleteAll() {
-
-            }
-
-            @Override
-            public List<Customer> findAll(Sort sort) {
-                return null;
-            }
-
-            @Override
-            public Page<Customer> findAll(Pageable pageable) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> Optional<S> findOne(Example<S> example) {
-                return Optional.empty();
-            }
-
-            @Override
-            public <S extends Customer> Page<S> findAll(Example<S> example, Pageable pageable) {
-                return null;
-            }
-
-            @Override
-            public <S extends Customer> long count(Example<S> example) {
-                return 0;
-            }
-
-            @Override
-            public <S extends Customer> boolean exists(Example<S> example) {
-                return false;
-            }
-
-            @Override
-            public <S extends Customer, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
-                return null;
-            }
-        };
-
-        CustomerServiceImpl customerService=new CustomerServiceImpl();
-        // act
-        CustomerDTO actualCustomerDTO = customerService.loginCustomer("johndoe", "password");
-
-        // assert
-        assertNull(actualCustomerDTO);
+        assertEquals(expected, actual);
     }
 
 }
