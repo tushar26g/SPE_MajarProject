@@ -46,25 +46,25 @@ class EBillPayApplicationTests {
 
     @Test
     public void testLoginCustomer() {
-        String userName = "testuser";
-        String password = "testpass";
+        String userName = "vaishu";
+        String password = "vaishu";
         Customer mockCustomer = new Customer();
         mockCustomer.setCustomerId(1);
         mockCustomer.setAddress("123 Main St");
-        mockCustomer.setEmail("testuser@example.com");
-        mockCustomer.setFirstName("John");
-        mockCustomer.setLastName("Doe");
-        mockCustomer.setMobileNumber("555-1234");
+        mockCustomer.setEmail("vaishnavi@example.com");
+        mockCustomer.setFirstName("Vashnavi");
+        mockCustomer.setLastName("Gangarde");
+        mockCustomer.setMobileNumber("9865321470");
 
         when(loginRepo.findOneByUserNameAndPassword(userName, password)).thenReturn(mockCustomer);
 
         CustomerDTO expected = new CustomerDTO();
         expected.setCustomerId(1);
         expected.setAddress("123 Main St");
-        expected.setEmail("testuser@example.com");
-        expected.setFirstName("John");
-        expected.setLastName("Doe");
-        expected.setMobileNumber("555-1234");
+        expected.setEmail("vaishnavi@example.com");
+        expected.setFirstName("Vashnavi");
+        expected.setLastName("Gangarde");
+        expected.setMobileNumber("9865321470");
 
         CustomerDTO actual = customerService.loginCustomer(userName, password);
 
