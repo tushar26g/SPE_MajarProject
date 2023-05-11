@@ -24,11 +24,6 @@
         src: /var/lib/jenkins/workspace/SPE_project/docker-compose.yml
         dest: /opt/docker-compose.yml
 
-    - name: Stop Docker Compose stack
-      command: docker rm -f $(docker ps -aq)
-      args:
-        chdir: /opt/
-
     - name: Start Docker Compose stack
       command: docker-compose up -d
       args:
