@@ -1,49 +1,3 @@
-#services:
-#  ebill-backend:
-#    image: tushar26g/ebill-backend
-#    container_name: ebill-backend
-#    ports:
-#      - "5000:5000"
-#    #    networks:
-#    #      fintrack:
-#    #        ipv4_address: 172.28.1.7
-#    environment:
-#      - MYSQL_HOST=192.168.43.44
-#      - MYSQL_PORT=3308
-#    depends_on:
-#        mydb:
-#          condition: service_healthy
-#
-#  mydb:
-#    image: mysql:latest
-#    ports:
-#      - "3308:3306"
-#    healthcheck:
-#      test: ["CMD","ls"]
-#    container_name: database-container
-#    #    networks:
-#    #      fintrack:
-#    #        ipv4_address: 172.28.1.8
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=password
-#    #      - MYSQL_DATABASE=EBillDataCenter
-#    volumes:
-#      - /home/tuhar/mysql_volume:/var/lib/mysql
-#
-#  ebill-frontend:
-#    image: tushar26g/ebill-frontend
-#    container_name: ebill-frontend
-#    # Keep stdin_open because we don't want this container to exit immediately which it
-#    # otherwise would have because there's no foreground processes
-#    stdin_open: true
-#    ports:
-#      - "3000:3000"
-##    networks:
-##      fintrack:
-##        ipv4_address: 172.28.1.6
-#    depends_on:
-#      - ebill-backend
-#
 version: '3.9'
 networks:
   ebill-network:
@@ -61,7 +15,7 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: EBillDataCenter
     volumes:
-      - database-volume:/var/lib/mysql
+      - ebill-volume:/var/lib/mysql
     networks:
       - ebill-network
   ebill-backend:
