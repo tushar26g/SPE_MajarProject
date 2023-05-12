@@ -18,6 +18,4 @@ public class CustomerDTO {
     private String email;
     private String mobileNumber;
 
-    private String userName;
-    private String password;
 }

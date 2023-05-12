@@ -29,6 +29,7 @@ public class CustomerServiceImpl implements CustomerService {
     private final OrderRepository orderRepository;
     private final PaymentLogsRepository paymentLogsRepository;
     public Integer addCustomer(Customer customer){
+        System.out.println("Anushka");
         loginRepo.save(customer);
         return customer.getCustomerId();
     }
