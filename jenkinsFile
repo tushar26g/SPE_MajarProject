@@ -1,0 +1,59 @@
+pipeline {
+    environment{
+        dockerimg=""
+        dockerimgfrontend=""
+    }
+    agent any
+
+    stages {
+        stage('Clone Git') {
+            steps {
+                git 'https://github.com/tushar26g/SPE_MajarProject.git'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                dir('./backend') {
+                    sh 'mvn clean install'
+                }
+            }
+        }
+        stage('Docker Build Image') {
+            steps {
+                script{
+                    dir('./backend') {
+                        dockerimg=docker.build "tushar26g/ebill-backend:latest"
+                    }
+                    dir('./frontend') {
+                        dockerimgfrontend=docker.build "tushar26g/ebill-frontend:latest"
+                    }
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script{
+                    docker.withRegistry('','dockerhubID'){
+                    dockerimg.push()
+                    }
+                    docker.withRegistry('','dockerhubID'){
+                    dockerimgfrontend.push()
+                    }
+                }
+            }
+        }
+        stage('Delete Docker Image') {
+            steps {
+                script{
+                    sh 'docker image rm -f tushar26g/ebill-backend'
+                    sh 'docker image rm -f tushar26g/ebill-frontend'
+                }
+            }
+        }
+        stage('Ansible pull Docker Image') {
+            steps {
+                ansiblePlaybook becomeUser: null, colorized: true, disableHostKeyChecking: true, inventory: './deploy-docker/inventory', playbook: './deploy-docker/ebill-deploy.yml', sudoUser: null
+            }
+        }
+    }
+}
